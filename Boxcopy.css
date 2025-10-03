@@ -3,16 +3,19 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 .boxes {
+    
+    margin-left: 12%;
+}
+.right_container {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-left: 20px;
 }
 
-.nav {
+.nav{
     display: flex;
     background-color: black;
     color: white;
-    width: 70vw;
+    width: 70%;
     height: 40px;
     justify-content: center;
     border-radius: 40px;
@@ -38,35 +41,45 @@ body {
 }
 
 .largeBox {
-    display: grid;
-    place-items: center;
-    width: 35vw;
-    height: 80vh;
+    width: 35%;
+    height: 350px;
     background-image: linear-gradient(to bottom right,yellow, rgb(255, 208, 0));
+    margin-left: 150px;
+    margin-bottom: 10px;
     border-radius: 20px;
 }
 
-.right_container {
-    align-items: "center";
-    justify-content: center;
+.largeBox h4 {
+    text-align: center;;
+    padding-top: 320px;
+
 }
 
 .smallBox1 {
-    margin: 20px;
-    display: grid;
-    place-items: center;
-    width: 25vw;
-    height: 38vh;
+    width: 370%;
+    height: 335px;
     background-image: linear-gradient(to bottom right,yellow, rgb(255, 208, 0));
+    margin-left: 20px;
     border-radius: 20px;
+    margin-top: -20px;
+}
+
+.smallBox1 h4 {
+    text-align: center;;
+    padding-top: 160px;
+
 }
 
 .smallBox2 {
-    margin: 20px;
-    display: grid;
-    place-items: center;
-    width: 25vw;
-    height: 38vh;
+    width: 370%;
+    height: 335px;
     background-image: linear-gradient(to bottom right,yellow, rgb(255, 208, 0));
+    margin-left: 20px;
     border-radius: 20px;
+}
+
+.smallBox2 h4 {
+    text-align: center;;
+    padding-top: 160px;
+
 }

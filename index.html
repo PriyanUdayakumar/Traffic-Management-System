@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Traffic Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>AI Traffic Management System</h1>
+                <div class="system-status">
+                    <span class="status-indicator online"></span>
+                    <span>System Online - AI Mode Active</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="current-time" id="currentTime">September 10, 2025 10:23 AM</div>
+                <button class="btn btn--outline emergency-btn">🚨 Emergency Override</button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Grid -->
+        <div class="main-dashboard">
+            <!-- Traffic Simulation Section (Top Half) -->
+            <section class="traffic-simulation">
+                <div class="simulation-header">
+                    <h2>Live Traffic Simulation - Main St & Oak Ave</h2>
+                    <div class="simulation-controls-header">
+                        <div class="simulation-status">
+                            <span class="status-dot running"></span>
+                            <span>Simulation Running</span>
+                        </div>
+                        <div class="timestamp">10:23:45 AM</div>
+                    </div>
+                </div>
+                
+                <div class="intersection-container">
+                    <!-- Road Network -->
+                    <div class="road-network">
+                        <!-- Horizontal Roads -->
+                        <div class="road horizontal main-road"></div>
+                        <!-- Vertical Roads -->
+                        <div class="road vertical oak-road"></div>
+                        
+                        <!-- Lane Markings -->
+                        <div class="lane-markings horizontal"></div>
+                        <div class="lane-markings vertical"></div>
+                        
+                        <!-- Traffic Lights -->
+                        <div class="traffic-light-post north">
+                            <div class="traffic-light-container">
+                                <div class="light red" id="north-red"></div>
+                                <div class="light yellow" id="north-yellow"></div>
+                                <div class="light green active" id="north-green"></div>
+                            </div>
+                            <div class="light-label">N-S Green</div>
+                            <div class="countdown" id="north-countdown">25s</div>
+                        </div>
+                        
+                        <div class="traffic-light-post south">
+                            <div class="traffic-light-container">
+                                <div class="light red" id="south-red"></div>
+                                <div class="light yellow" id="south-yellow"></div>
+                                <div class="light green active" id="south-green"></div>
+                            </div>
+                            <div class="light-label">N-S Green</div>
+                        </div>
+                        
+                        <div class="traffic-light-post east">
+                            <div class="traffic-light-container">
+                                <div class="light red active" id="east-red"></div>
+                                <div class="light yellow" id="east-yellow"></div>
+                                <div class="light green" id="east-green"></div>
+                            </div>
+                            <div class="light-label">E-W Red</div>
+                        </div>
+                        
+                        <div class="traffic-light-post west">
+                            <div class="traffic-light-container">
+                                <div class="light red active" id="west-red"></div>
+                                <div class="light yellow" id="west-yellow"></div>
+                                <div class="light green" id="west-green"></div>
+                            </div>
+                            <div class="light-label">E-W Red</div>
+                        </div>
+                        
+                        <!-- Directional Arrows -->
+                        <div class="direction-arrow north">↑</div>
+                        <div class="direction-arrow south">↓</div>
+                        <div class="direction-arrow east">→</div>
+                        <div class="direction-arrow west">←</div>
+                        
+                        <!-- Vehicles -->
+                        <div class="vehicles-container" id="vehiclesContainer">
+                            <!-- Vehicles will be dynamically added here -->
+                        </div>
+                        
+                        <!-- Detection Overlays -->
+                        <div class="detection-overlay">
+                            <div class="detection-zone north" id="detectionNorth"></div>
+                            <div class="detection-zone south" id="detectionSouth"></div>
+                            <div class="detection-zone east" id="detectionEast"></div>
+                            <div class="detection-zone west" id="detectionWest"></div>
+                        </div>
+                        
+                        <!-- Queue Indicators -->
+                        <div class="queue-indicator north">
+                            <div class="queue-label">Queue: <span id="queueNorth">3</span></div>
+                        </div>
+                        <div class="queue-indicator south">
+                            <div class="queue-label">Queue: <span id="queueSouth">5</span></div>
+                        </div>
+                        <div class="queue-indicator east">
+                            <div class="queue-label">Queue: <span id="queueEast">8</span></div>
+                        </div>
+                        <div class="queue-indicator west">
+                            <div class="queue-label">Queue: <span id="queueWest">6</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <h2>System Control</h2>
+                
+                <div class="control-group">
+                    <label class="form-label">Select Intersection</label>
+                    <select class="form-control" id="intersectionSelect">
+                        <option value="main-oak">Main St & Oak Ave</option>
+                        <option value="park-first">Park Rd & 1st St</option>
+                        <option value="broadway-42">Broadway & 42nd</option>
+                        <option value="fifth-59">5th Ave & 59th</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">System Mode</label>
+                    <div class="mode-buttons">
+                        <button class="btn btn--primary active" data-mode="ai">AI Mode</button>
+                        <button class="btn btn--secondary" data-mode="manual">Manual Override</button>
+                        <button class="btn btn--secondary" data-mode="fixed">Fixed-Time</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">Signal Phase Duration</label>
+                    <div class="slider-group">
+                        <label>Green Phase: <span id="greenValue">35</span>s</label>
+                        <input type="range" min="25" max="45" value="35" class="slider" id="greenSlider">
+                    </div>
+                    <div class="slider-group">
+                        <label>Yellow Phase: <span id="yellowValue">5</span>s</label>
+                        <input type="range" min="3" max="8" value="5" class="slider" id="yellowSlider">
+                    </div>
+                    <div class="slider-group">
+                        <label>Red Phase: <span id="redValue">30</span>s</label>
+                        <input type="range" min="20" max="40" value="30" class="slider" id="redSlider">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">Simulation Controls</label>
+                    <div class="simulation-controls">
+                        <button class="btn btn--outline active" id="playBtn">▶ Play</button>
+                        <button class="btn btn--outline" id="pauseBtn">⏸ Pause</button>
+                        <button class="btn btn--outline" id="resetBtn">⟲ Reset</button>
+                    </div>
+                    <div class="speed-control">
+                        <label>Speed: <span id="speedValue">1x</span></label>
+                        <input type="range" min="1" max="4" value="1" class="slider" id="speedSlider">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">AI Backend</label>
+                    <div class="simulation-controls">
+                        <input class="form-control" id="backendUrl" value="http://127.0.0.1:8000" />
+                        <button class="btn btn--primary" id="optimizeBtn">Optimize via RL</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">Traffic Demand</label>
+                    <select class="form-control" id="trafficDemand">
+                        <option value="light">Light Traffic</option>
+                        <option value="normal" selected>Normal Traffic</option>
+                        <option value="heavy">Heavy Traffic</option>
+                        <option value="rush">Rush Hour</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">Emergency Controls</label>
+                    <div class="emergency-controls">
+                        <button class="btn btn--outline btn--sm emergency-override">Emergency Override</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">Trigger Incident</label>
+                    <div class="incident-buttons">
+                        <button class="btn btn--outline btn--sm" data-incident="accident">Accident</button>
+                        <button class="btn btn--outline btn--sm" data-incident="roadwork">Road Work</button>
+                        <button class="btn btn--outline btn--sm" data-incident="blocked">Lane Blocked</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="form-label">System Status</label>
+                    <div class="status-indicators">
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span>Network: OPTIMAL</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span>AI System: Active</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span>Sensors: Online</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom Section with KPIs and Analytics -->
+            <div class="bottom-section">
+                <!-- KPI Metrics Panel -->
+                <section class="kpi-panel">
+                    <h3>Key Performance Indicators</h3>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-icon">🕒</div>
+                            <div class="kpi-content">
+                                <div class="kpi-label">Avg Commute Time</div>
+                                <div class="kpi-value">
+                                    <span id="kpi-commute">12.3</span> min
+                                    <span class="kpi-trend down">↓ 26.8%</span>
+                                </div>
+                                <div class="kpi-baseline">Target: <15 min</div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon">🚗</div>
+                            <div class="kpi-content">
+                                <div class="kpi-label">Traffic Throughput</div>
+                                <div class="kpi-value">
+                                    <span id="kpi-throughput">1,247</span> veh/hr
+                                    <span class="kpi-trend up">↑ 27.2%</span>
+                                </div>
+                                <div class="kpi-baseline">vs baseline: 980 veh/hr</div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon">⏱️</div>
+                            <div class="kpi-content">
+                                <div class="kpi-label">Avg Wait Time</div>
+                                <div class="kpi-value">
+                                    <span id="kpi-wait">2.1</span> min
+                                    <span class="kpi-trend down">↓ 43.2%</span>
+                                </div>
+                                <div class="kpi-baseline">vs baseline: 3.7 min</div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon">⚡</div>
+                            <div class="kpi-content">
+                                <div class="kpi-label">System Efficiency</div>
+                                <div class="kpi-value">
+                                    <span id="kpi-efficiency">87</span>%
+                                    <span class="kpi-trend up">↑ 20.8%</span>
+                                </div>
+                                <div class="kpi-baseline">vs baseline: 72%</div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon">🌱</div>
+                            <div class="kpi-content">
+                                <div class="kpi-label">CO₂ Emissions Saved</div>
+                                <div class="kpi-value">
+                                    <span id="kpi-co2">15.2</span>%
+                                    <span class="kpi-trend up">↑ 52.0%</span>
+                                </div>
+                                <div class="kpi-baseline">reduction vs baseline</div>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon">🚦</div>
+                            <div class="kpi-content">
+                                <div class="kpi-label">Signal Cycle Time</div>
+                                <div class="kpi-value">
+                                    <span id="kpi-cycle">68</span> sec
+                                    <span class="kpi-trend down">↓ 15.0%</span>
+                                </div>
+                                <div class="kpi-baseline">vs baseline: 80 sec</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analytics Panel -->
+                <section class="analytics-panel">
+                    <h3>Traffic Analytics</h3>
+                    <div class="charts-grid">
+                        <div class="chart-container" style="position: relative; height: 140px;">
+                            <canvas id="hourlyTrafficChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container" style="position: relative; height: 140px;">
+                            <canvas id="waitTimesChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container" style="position: relative; height: 140px;">
+                            <canvas id="vehicleTypesChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container" style="position: relative; height: 140px;">
+                            <canvas id="optimizationChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
